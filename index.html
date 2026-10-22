@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="GhostMode: find recurring charges in a statement CSV. Runs entirely in your browser.">
+  <title>GhostMode - Recurring Charge Audit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>GhostMode</h1>
+      <p class="muted">Find recurring charges in a bank or card statement. Everything runs in your browser.</p>
+      <p class="privacy">Nothing is uploaded. This page makes no network requests. Close the tab when you're done.</p>
+    </header>
+
+    <section class="card">
+      <h2>1. Load your statement</h2>
+      <p class="muted">Export a CSV from your bank or card website. Remove account numbers and names where you can.</p>
+      <label class="drop" id="drop">
+        <input type="file" id="file" accept=".csv,.txt,text/csv" hidden>
+        Drop a CSV here, or click to choose a file
+      </label>
+      <textarea id="raw" rows="6" placeholder="...or paste CSV text here"></textarea>
+
+      <div class="grid">
+        <label class="check"><input type="checkbox" id="hasHeader" checked> First row is headers</label>
+        <label class="check"><input type="checkbox" id="dayFirst" checked> Dates are day/month/year</label>
+        <label>Spending shows as
+          <select id="spendMode">
+            <option value="auto">Detect automatically</option>
+            <option value="negative">Negative numbers</option>
+            <option value="positive">Positive numbers</option>
+          </select>
+        </label>
+        <label>Currency symbol
+          <input id="symbol" value="₹" maxlength="3">
+        </label>
+      </div>
+
+      <div class="grid">
+        <label>Date column<select id="colDate"></select></label>
+        <label>Description column<select id="colDesc"></select></label>
+        <label>Amount column<select id="colAmount"></select></label>
+      </div>
+
+      <div class="row">
+        <button id="analyze" class="primary" type="button">Find recurring charges</button>
+        <button id="sample" class="ghost" type="button">Try sample data</button>
+      </div>
+      <p id="error" class="error" hidden></p>
+    </section>
+
+    <section class="card" id="results" hidden>
+      <h2>2. Findings</h2>
+      <div id="summary" class="summary"></div>
+      <p class="muted small" id="notes"></p>
+      <div id="list"></div>
+      <div class="row">
+        <button id="copyReport" class="ghost" type="button">Copy report</button>
+        <button id="downloadCsv" class="ghost" type="button">Download findings CSV</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>About these results</h2>
+      <ul class="notes">
+        <li>"Recurring" means the same merchant, a regular gap between charges, and a repeated amount. It's a lead to check, not proof of a subscription.</li>
+        <li>Account links point to each company's account page. They are not checked on every visit, so confirm them before you use them.</li>
+        <li>Price rises and "no recent charge" flags come from the statement you loaded, not from the company.</li>
+        <li>This is not financial or legal advice. Review every charge against your own records.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="services.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
